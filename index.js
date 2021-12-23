@@ -40,6 +40,7 @@ const addDept = () => {
         })
 }
 
+// Add New Role to the Database
 const addRole = () => {
     let department = [];
     // Get All Department and push the object into array called department
@@ -81,6 +82,7 @@ const addRole = () => {
     });
 }
 
+// Add New Employee to the Database
 const addEmployee = () => {
     let allRole = [];
     let allEmployee = [];
@@ -132,7 +134,7 @@ const addEmployee = () => {
         {
             type: 'rawlist',
             name: 'manager',
-            message: "Please select employee's manager: ",
+            message: "Who is the employee's manager: ",
             choices: allEmployee
         }
     ]).then(answer => {
@@ -152,6 +154,68 @@ const addEmployee = () => {
         scripts.addEmployee(answer.first, answer.last, roleID, managerID);
         return options();
     })
+}
+
+const updateRole = () => {
+    let newRole = [];
+    let currentEmployee = [];
+
+    // Get All Role and create a new Object with ID/Title and push into array called allRole
+    getRole().then(roles => {
+        roles.forEach(role => {
+            let newObj = {
+                id: role.id,
+                name: role.Title
+            }
+            newRole.push(newObj);
+        })
+    });
+    // Get All Employee and create a new Object with ID/Name and push into array called allEmployee
+    getEmployee().then(employees => {
+        employees.forEach(employee => {
+            // Create a new object with only ID & Name
+            let newObj = {
+                    id: employee.id,
+                    name: employee.first_name + " " + employee.last_name
+                }
+                // Push object into allEmployee
+            currentEmployee.push(newObj);
+        })
+    }).then(() => {
+        return inquirer.prompt([
+            // Prompt users to select an employee
+            {
+                type: 'rawlist',
+                name: 'employee',
+                message: "Select a employee to update their Role.",
+                choices: currentEmployee
+            },
+            // Prompt users to select a new Role
+            {
+                type: 'rawlist',
+                name: 'newRole',
+                message: "Select a new Role for this Employee.",
+                choices: newRole
+            }
+        ]).then(answers => {
+            // Find Role ID
+            let roleID = newRole.find(id => {
+                    if (id.name === answers.newRole) {
+                        return id;
+                    }
+                }).id
+                // Find Employee ID
+            let employeeID = currentEmployee.find(id => {
+                if (id.name === answers.employee) {
+                    return id;
+                }
+            }).id;
+            // Calls the Database Class Function and pass Paramter to update employee's Role to DB
+            scripts.updateRole(employeeID, roleID)
+            return options();
+        })
+    })
+
 }
 
 const options = () => {
@@ -194,6 +258,7 @@ const options = () => {
                     addEmployee();
                     break;
                 case 'Update Employee Role':
+                    updateRole();
                     break;
                 case 'End':
                     process.exit();

@@ -13,10 +13,10 @@ VALUES
     ('AR', 5000, 3),
     ('AP', 5000, 3);
 
-INSERT INTO employee (first_name, last_name, role_id)
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES 
-    ('Andrew', 'Yu', 4),
-    ('John', 'Watson', 5),
-    ('Patrick', 'Chow', 6),
-    ('Vik', 'Chowdury', 1),
-    ('Sandra', 'Brown', 2 )
+    ('Andrew', 'Yu', 4, null),
+    ('John', 'Watson', 5, 1),
+    ('Patrick', 'Chow', 6, 1),
+    ('Vik', 'Chowdury', 1, null),
+    ('Sandra', 'Brown', 2, null)
