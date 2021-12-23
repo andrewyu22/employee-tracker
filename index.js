@@ -31,7 +31,15 @@ const addDept = () => {
             {
                 type: 'input',
                 name: 'department',
-                message: 'Please enter a new Department name: '
+                message: 'Please enter a new Department name: ',
+                validate: deptInput => {
+                    if (deptInput) {
+                        return true;
+                    } else {
+                        console.log("Please enter a validate name!");
+                        return false;
+                    }
+                }
             })
         .then(newDept => {
             // Calls the Database Class Function and pass the newDept Paramter to add to the DB
@@ -54,13 +62,29 @@ const addRole = () => {
         {
             type: 'input',
             name: 'role',
-            message: 'Please enter a new Role: '
+            message: 'Please enter a new Role: ',
+            validate: roleInput => {
+                if (roleInput) {
+                    return true;
+                } else {
+                    console.log("Please enter a validate role!");
+                    return false;
+                }
+            }
         },
         // Prompt users for the Role's Salary
         {
             type: 'input',
             name: 'salary',
-            message: 'Please enter the salary of the role: '
+            message: 'Please enter the salary of the role: ',
+            validate: salaryInput => {
+                if (salaryInput) {
+                    return true;
+                } else {
+                    console.log('Please enter a validate Salary!')
+                    return false;
+                }
+            }
         },
         // Prompt users for Department
         {
@@ -115,13 +139,29 @@ const addEmployee = () => {
         {
             type: 'input',
             name: 'first',
-            message: "Please enter employee's first name: "
+            message: "Please enter employee's first name: ",
+            validate: firstInput => {
+                if (firstInput) {
+                    return true;
+                } else {
+                    console.log('Please enter the first name!');
+                    return false;
+                }
+            }
         },
         // Prompt user for Last Name
         {
             type: 'input',
             name: 'last',
-            message: "Please enter employee's last name: "
+            message: "Please enter employee's last name: ",
+            validate: lastInput => {
+                if (lastInput) {
+                    return true;
+                } else {
+                    console.log('Please enter the last name!');
+                    return false;
+                }
+            }
         },
         // Select from List of Existing Roles
         {
