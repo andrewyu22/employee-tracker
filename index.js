@@ -255,6 +255,48 @@ const updateRole = () => {
             return options();
         })
     })
+}
+
+const updateManager = () => {
+    let allEmployee = [];
+    getEmployee().then(employees => {
+        employees.forEach(employee => {
+            // Create a new object with only ID & Name
+            let newObj = {
+                    id: employee.id,
+                    name: employee.first_name + " " + employee.last_name
+                }
+                // Push object into allEmployee
+            allEmployee.push(newObj);
+        })
+    }).then(() => {
+        return inquirer.prompt([{
+                type: 'rawlist',
+                name: 'employee',
+                message: "Select a employee to update their Role.",
+                choices: allEmployee
+            },
+            {
+                type: 'rawlist',
+                name: 'manager',
+                message: "Select a manager for this employee.",
+                choices: allEmployee
+            }
+        ]).then(answers => {
+            let employeeID = allEmployee.find(id => {
+                if (id.name === answers.employee) {
+                    return id;
+                }
+            }).id;
+            let managerID = allEmployee.find(id => {
+                if (id.name === answers.manager) {
+                    return id;
+                }
+            }).id;
+            scripts.updateManager(employeeID, managerID);
+            return options();
+        })
+    })
 
 }
 
@@ -265,7 +307,7 @@ const options = () => {
                 type: 'rawlist',
                 name: 'option',
                 message: 'Select an option!',
-                choices: ['View all Departments', 'View all Roles', 'View all Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role', 'End']
+                choices: ['View all Departments', 'View all Roles', 'View all Employees', 'View Department Budgets', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role', "Update Employee's Manager", 'End']
             }
         ])
         .then(answer => {
@@ -288,6 +330,12 @@ const options = () => {
                         options();
                     });
                     break;
+                case 'View Department Budgets':
+                    scripts.viewDepartmentBudget().then(data => {
+                        console.table(data);
+                        options();
+                    });
+                    break;
                 case 'Add Department':
                     addDept();
                     break;
@@ -299,6 +347,9 @@ const options = () => {
                     break;
                 case 'Update Employee Role':
                     updateRole();
+                    break;
+                case "Update Employee's Manager":
+                    updateManager();
                     break;
                 case 'End':
                     process.exit();
